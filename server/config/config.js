@@ -2,20 +2,20 @@
 
 process.env.PORT = process.env.PORT || 3000;
 
-
 /////////////////////////////////////////
 ///ENTORNO
 //////////////////////////////
-process.env.NODE_ENV = process.env.NODE_ENV || 'dev';
+process.env.NODE_ENV = process.env.NODE_ENV || "dev";
 
 ////////////////////////////////////////
 //Base de DAtos
 ////////////////////////////
 let urlDB;
 
-if (process.env.NODE_ENV === 'dev') {
-    urlDB = 'mongodb://localhost:27017/cafe'
+if (process.env.NODE_ENV === "dev") {
+  urlDB = "mongodb://localhost:27017/cafe";
 } else {
-    urlDB = 'mongodb+srv://shadow:yCrqVBBcwNy3oh9e@cluster0-vweeg.mongodb.net/cafes'
+  urlDB =
+    "mongodb+srv://shadow:yCrqVBBcwNy3oh9e@cluster0-vweeg.mongodb.net/cafe";
 }
 process.env.URLDB = urlDB;
