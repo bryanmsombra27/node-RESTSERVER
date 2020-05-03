@@ -1,0 +1,6 @@
+user: shadow
+
+
+yCrqVBBcwNy3oh9e
+
+mongodb+srv://shadow:yCrqVBBcwNy3oh9e@cluster0-vweeg.mongodb.net/cafes
