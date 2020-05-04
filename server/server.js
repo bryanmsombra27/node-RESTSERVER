@@ -13,7 +13,8 @@ app.use(bodyParser.urlencoded({
 //parse application/json
 app.use(bodyParser.json());
 
-app.use(require('./routes/usuario'));
+//configuracion global de rutas
+app.use(require('./routes/index'));
 
 //Conectando con la base de datos:  el metodo connect puede recibir 3 parametros el primero es la ruta de la conexion hacia la base de datos(al estar de manera local es correcta esa ruta olo indicamos el puerto de conexion y el nombre de la bd a conectar)   
 //Segundo parametro un objeto necesario para evitar futuros problemas de conexion en nuevas versiones de node y como tercer parametro (opcional) una callback en caso de que la conexion sea negativa tira un error de conexion o caso contrario indica que se ha conectado correctamente

@@ -1,18 +1,25 @@
 const express = require("express");
-const app = express();
 
 const bcrypt = require("bcrypt");
 const _ = require("underscore");
 const Usuario = require("../models/usuario");
+const {
+  verificaToken,
+  verificaAdminRole
+} = require('../middlewares/authenticacion');
 
-app.get("/usuario", (req, res) => {
+const app = express();
+app.get("/usuario", verificaToken, (req, res) => {
+
   let desde = req.query.desde || 0;
   let limite = req.query.limite || 5;
 
   desde = Number(desde);
   limite = Number(limite);
 
-  Usuario.find({ estado: true })
+  Usuario.find({
+      estado: true
+    })
     .skip(desde)
     .limit(limite)
     .exec((err, usuarios) => {
@@ -23,7 +30,9 @@ app.get("/usuario", (req, res) => {
         });
       }
 
-      Usuario.count({ estado: true }, (err, conteo) => {
+      Usuario.countDocuments({
+        estado: true
+      }, (err, conteo) => {
         res.json({
           ok: true,
           usuarios,
@@ -32,7 +41,7 @@ app.get("/usuario", (req, res) => {
       });
     });
 });
-app.post("/usuario", (req, res) => {
+app.post("/usuario", [verificaToken, verificaAdminRole], (req, res) => {
   let body = req.body;
   let usuario = new Usuario({
     nombre: body.nombre,
@@ -57,15 +66,14 @@ app.post("/usuario", (req, res) => {
     });
   });
 });
-app.put("/usuario/:id", (req, res) => {
+app.put("/usuario/:id", [verificaToken, verificaAdminRole], (req, res) => {
   let id = req.params.id;
   let body = _.pick(req.body, ["nombre", "email", "img", "role", "estado"]);
 
   //actualizando un usuario
   Usuario.findByIdAndUpdate(
     id,
-    body,
-    {
+    body, {
       new: true,
       runValidators: true,
     },
@@ -83,15 +91,18 @@ app.put("/usuario/:id", (req, res) => {
     }
   );
 });
-app.delete("/usuario/:id", (req, res) => {
+app.delete("/usuario/:id", [verificaToken, verificaAdminRole], (req, res) => {
   let id = req.params.id;
 
   //   Usuario.findByIdAndRemove(id, (err, usuarioBorrado) => {
-  let cambiaEstado = { estado: false };
+  let cambiaEstado = {
+    estado: false
+  };
   Usuario.findByIdAndUpdate(
     id,
-    cambiaEstado,
-    { new: true },
+    cambiaEstado, {
+      new: true
+    },
     (err, usuarioBorrado) => {
       if (err) {
         return res.status(400).json({
